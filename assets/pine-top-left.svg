@@ -1,0 +1,46 @@
+<svg width="200" height="200" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+  <!-- Pine branch illustration inspired by reference -->
+  <g opacity="0.85">
+    <!-- Branch -->
+    <path d="M 10 10 Q 40 30, 60 50 Q 80 70, 100 90 Q 120 110, 140 130" 
+          stroke="#3d2817" stroke-width="3" fill="none" stroke-linecap="round"/>
+
+    <!-- Pine needles clusters -->
+    <g fill="#4a5f4d" opacity="0.8">
+      <!-- Cluster 1 -->
+      <path d="M 20 20 L 5 15 L 10 25 Z"/>
+      <path d="M 22 18 L 15 8 L 18 22 Z"/>
+      <path d="M 24 22 L 12 20 L 20 30 Z"/>
+
+      <!-- Cluster 2 -->
+      <path d="M 50 45 L 35 38 L 42 50 Z"/>
+      <path d="M 48 42 L 38 32 L 45 48 Z"/>
+      <path d="M 52 47 L 40 45 L 48 55 Z"/>
+
+      <!-- Cluster 3 -->
+      <path d="M 80 75 L 65 68 L 72 80 Z"/>
+      <path d="M 78 72 L 68 62 L 75 78 Z"/>
+      <path d="M 82 77 L 70 75 L 78 85 Z"/>
+
+      <!-- Cluster 4 -->
+      <path d="M 110 105 L 95 98 L 102 110 Z"/>
+      <path d="M 108 102 L 98 92 L 105 108 Z"/>
+      <path d="M 112 107 L 100 105 L 108 115 Z"/>
+    </g>
+
+    <!-- Pine cones -->
+    <g>
+      <!-- Cone 1 -->
+      <ellipse cx="35" cy="55" rx="8" ry="12" fill="#6d5843" opacity="0.9"/>
+      <ellipse cx="35" cy="52" rx="6" ry="4" fill="#8b7355"/>
+      <ellipse cx="35" cy="56" rx="6" ry="4" fill="#8b7355"/>
+      <ellipse cx="35" cy="60" rx="6" ry="4" fill="#8b7355"/>
+
+      <!-- Cone 2 -->
+      <ellipse cx="95" cy="110" rx="7" ry="11" fill="#6d5843" opacity="0.9"/>
+      <ellipse cx="95" cy="107" rx="5" ry="3.5" fill="#8b7355"/>
+      <ellipse cx="95" cy="111" rx="5" ry="3.5" fill="#8b7355"/>
+      <ellipse cx="95" cy="115" rx="5" ry="3.5" fill="#8b7355"/>
+    </g>
+  </g>
+</svg>

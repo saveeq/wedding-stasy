@@ -1,0 +1,879 @@
+/* ============================================
+   Wedding Invitation Styles - V2
+   Mobile-first, winter theme
+   ============================================ */
+
+/* ===== CSS Variables (Easy customization) ===== */
+:root {
+    /* Color Palette - Winter theme: Deep green + Gold + Icy blue accents */
+    --color-primary: #2f4f3f;
+    --color-accent: #c9a15b;
+    --color-ice-blue: #a8d8ea;
+    --color-background: #f8f6f3;
+    --color-text: #2c2c2c;
+    --color-text-light: #5a5a5a;
+    --color-white: #ffffff;
+
+    /* Typography - Montserrat is more readable on mobile */
+    --font-script: 'Great Vibes', cursive;
+    --font-body: 'Montserrat', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+
+    /* Spacing */
+    --spacing-xs: 0.5rem;
+    --spacing-sm: 1rem;
+    --spacing-md: 1.5rem;
+    --spacing-lg: 2rem;
+    --spacing-xl: 3rem;
+
+    /* Transitions */
+    --transition-smooth: all 0.3s ease;
+}
+
+/* ===== Reset & Base Styles ===== */
+*, *::before, *::after {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+html {
+    font-size: 16px;
+    scroll-behavior: smooth;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    html {
+        scroll-behavior: auto;
+    }
+
+    *, *::before, *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+    }
+}
+
+body {
+    font-family: var(--font-body);
+    color: var(--color-text);
+    background-color: var(--color-background);
+    background-image: url('assets/paper-texture.jpg');
+    background-size: cover;
+    background-attachment: fixed;
+    background-position: center;
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    overflow-x: hidden;
+    position: relative;
+    min-height: 100vh;
+}
+
+/* Paper texture overlay for depth */
+body::before {
+    content: '';
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: radial-gradient(ellipse at center, transparent 0%, rgba(0,0,0,0.05) 100%);
+    pointer-events: none;
+    z-index: 1;
+}
+
+/* ===== Snow Canvas ===== */
+#snowCanvas {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: 2;
+}
+
+/* ===== Snow Toggle Button ===== */
+.snow-toggle {
+    position: fixed;
+    top: var(--spacing-sm);
+    right: var(--spacing-sm);
+    background: rgba(255, 255, 255, 0.9);
+    border: 1px solid var(--color-ice-blue);
+    border-radius: 50%;
+    width: 44px;
+    height: 44px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.5rem;
+    cursor: pointer;
+    z-index: 1000;
+    transition: var(--transition-smooth);
+    box-shadow: 0 2px 8px rgba(168, 216, 234, 0.3);
+}
+
+.snow-toggle:hover {
+    transform: scale(1.1);
+    box-shadow: 0 4px 12px rgba(168, 216, 234, 0.5);
+}
+
+.snow-toggle.snow-off {
+    opacity: 0.5;
+}
+
+/* ===== Decorative Pine Branches ===== */
+.decoration {
+    position: fixed;
+    z-index: 3;
+    pointer-events: none;
+    opacity: 0.8;
+}
+
+.decoration-top {
+    top: 0;
+    left: 0;
+    width: 50%;
+    max-width: 220px;
+}
+
+.decoration-bottom {
+    bottom: 0;
+    right: 0;
+    width: 50%;
+    max-width: 220px;
+}
+
+.decoration img {
+    width: 100%;
+    height: auto;
+    display: block;
+}
+
+/* ===== Main Container ===== */
+.container {
+    position: relative;
+    z-index: 10;
+    max-width: 480px;
+    margin: 0 auto;
+}
+
+/* ===== Sections ===== */
+section {
+    opacity: 0;
+    animation: fadeInUp 0.8s ease forwards;
+}
+
+section:not(.hero) {
+    padding: var(--spacing-lg) var(--spacing-md);
+}
+
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+section:nth-child(1) { animation-delay: 0.1s; }
+section:nth-child(2) { animation-delay: 0.3s; }
+section:nth-child(3) { animation-delay: 0.4s; }
+section:nth-child(4) { animation-delay: 0.5s; }
+section:nth-child(5) { animation-delay: 0.6s; }
+section:nth-child(6) { animation-delay: 0.7s; }
+section:nth-child(7) { animation-delay: 0.8s; }
+section:nth-child(8) { animation-delay: 0.9s; }
+
+/* ===== Typography ===== */
+h1, h2, h3 {
+    font-weight: 600;
+    line-height: 1.2;
+}
+
+h2 {
+    font-size: 1.5rem;
+    text-align: center;
+    color: var(--color-primary);
+    margin-bottom: var(--spacing-md);
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    font-weight: 500;
+}
+
+/* ===== Ornaments & Dividers ===== */
+.ornament-top, .ornament-bottom, .ornament-small, .winter-accent {
+    text-align: center;
+    color: var(--color-ice-blue);
+    font-size: 1.5rem;
+    margin: var(--spacing-sm) 0;
+}
+
+.divider {
+    width: 60px;
+    height: 2px;
+    background: linear-gradient(to right, transparent, var(--color-ice-blue), transparent);
+    margin: 0 auto var(--spacing-lg);
+}
+
+/* ===== Hero Section - Full Screen ===== */
+.hero {
+    min-height: 100vh;
+    min-height: 100svh; /* Safari iOS fix */
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    justify-content: center;
+    text-align: center;
+    padding: var(--spacing-xl) var(--spacing-md);
+    position: relative;
+}
+
+.hero-content {
+    width: 100%;
+    max-width: 400px;
+}
+
+.couple-names {
+    font-family: var(--font-script);
+    font-size: clamp(2.8rem, 10vw, 4.5rem);
+    font-weight: 400;
+    color: var(--color-primary);
+    margin: var(--spacing-md) 0;
+    line-height: 1.2;
+    display: flex;
+    flex-direction: column;
+    gap: 0.3rem;
+}
+
+.ampersand {
+    font-size: 0.6em;
+    color: var(--color-accent);
+    margin: 0.2em 0;
+}
+
+.invitation-subtitle {
+    margin-top: var(--spacing-lg);
+}
+
+.invitation-text {
+    font-size: 0.9rem;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    color: var(--color-text-light);
+    font-weight: 300;
+    margin-bottom: var(--spacing-xs);
+}
+
+.invitation-text-large {
+    font-size: 1.1rem;
+    font-weight: 500;
+    color: var(--color-primary);
+    line-height: 1.4;
+    margin-top: var(--spacing-sm);
+}
+
+.scroll-hint {
+    position: absolute;
+    bottom: var(--spacing-lg);
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 2rem;
+    color: var(--color-ice-blue);
+    animation: bounce 2s infinite;
+}
+
+@keyframes bounce {
+    0%, 100% { transform: translateX(-50%) translateY(0); }
+    50% { transform: translateX(-50%) translateY(10px); }
+}
+
+/* ===== Welcome Section ===== */
+.welcome-section {
+    text-align: center;
+    background: rgba(255, 255, 255, 0.5);
+    border-radius: 12px;
+    margin: var(--spacing-md);
+}
+
+.welcome-text {
+    font-size: 0.95rem;
+    line-height: 1.7;
+    color: var(--color-text);
+    margin-bottom: var(--spacing-md);
+}
+
+.welcome-text:last-child {
+    margin-bottom: 0;
+}
+
+/* ===== Date Section ===== */
+.date-section {
+    text-align: center;
+}
+
+.date-block {
+    background: rgba(255, 255, 255, 0.7);
+    border: 2px solid var(--color-ice-blue);
+    border-radius: 16px;
+    padding: var(--spacing-lg);
+    margin: 0 auto var(--spacing-md);
+    max-width: 240px;
+    box-shadow: 0 4px 12px rgba(168, 216, 234, 0.2);
+}
+
+.date-day {
+    font-size: 0.95rem;
+    color: var(--color-text-light);
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    margin-bottom: var(--spacing-xs);
+    font-weight: 300;
+}
+
+.date-number {
+    font-size: 4rem;
+    font-weight: 600;
+    color: var(--color-primary);
+    line-height: 1;
+}
+
+.date-month {
+    font-size: 1.3rem;
+    color: var(--color-text);
+    margin-top: var(--spacing-xs);
+    text-transform: lowercase;
+    font-weight: 400;
+}
+
+.date-year {
+    font-size: 1.1rem;
+    color: var(--color-text-light);
+    margin-top: var(--spacing-xs);
+    font-weight: 300;
+}
+
+.date-subtitle {
+    font-size: 1rem;
+    font-style: italic;
+    color: var(--color-text-light);
+    line-height: 1.5;
+    padding: 0 var(--spacing-md);
+    font-weight: 300;
+}
+
+/* ===== Venue Section ===== */
+.venue-section {
+    text-align: center;
+}
+
+.venue-info {
+    margin-bottom: var(--spacing-md);
+}
+
+.venue-header {
+    margin-top: var(--spacing-xl);
+}
+
+.venue-name {
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: var(--color-primary);
+    margin-bottom: var(--spacing-xs);
+}
+
+.venue-address {
+    font-size: 0.95rem;
+    color: var(--color-text-light);
+    line-height: 1.5;
+    font-weight: 300;
+}
+
+.venue-note {
+    font-size: 0.9rem;
+    line-height: 1.6;
+    color: var(--color-text-light);
+    margin: var(--spacing-md) 0;
+    padding: 0 var(--spacing-sm);
+    font-weight: 300;
+}
+
+/* ===== Schedule Section ===== */
+.schedule-section {
+    text-align: center;
+}
+
+.schedule-intro {
+    font-size: 0.9rem;
+    color: var(--color-text-light);
+    margin-bottom: var(--spacing-md);
+    line-height: 1.6;
+    font-weight: 300;
+}
+
+.timeline {
+    margin-top: var(--spacing-md);
+}
+
+.timeline-item {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--spacing-md);
+    padding: var(--spacing-sm) var(--spacing-md);
+    margin-bottom: var(--spacing-sm);
+    background: rgba(255, 255, 255, 0.6);
+    border-radius: 10px;
+    border-left: 3px solid var(--color-ice-blue);
+}
+
+.timeline-time {
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: var(--color-primary);
+    min-width: 65px;
+    text-align: right;
+}
+
+.timeline-event {
+    font-size: 0.95rem;
+    color: var(--color-text);
+    text-align: left;
+    flex: 1;
+    font-weight: 400;
+}
+
+/* ===== Dress Code Section ===== */
+.dresscode-section {
+    text-align: center;
+}
+
+.dresscode-text {
+    font-size: 0.95rem;
+    line-height: 1.7;
+    color: var(--color-text);
+    margin-bottom: var(--spacing-md);
+    font-weight: 300;
+}
+
+.dresscode-note {
+    font-size: 0.9rem;
+    color: var(--color-text-light);
+    font-style: italic;
+    font-weight: 300;
+}
+
+/* ===== RSVP Section ===== */
+.rsvp-section {
+    text-align: center;
+}
+
+.rsvp-note {
+    font-size: 0.95rem;
+    color: var(--color-text-light);
+    margin-bottom: var(--spacing-xs);
+    font-weight: 400;
+}
+
+.rsvp-note-sub {
+    font-size: 0.85rem;
+    color: var(--color-text-light);
+    margin-bottom: var(--spacing-md);
+    font-weight: 300;
+}
+
+.rsvp-note strong {
+    color: var(--color-primary);
+    font-weight: 600;
+}
+
+/* ===== Form Styles ===== */
+.rsvp-form {
+    max-width: 100%;
+    margin: 0 auto;
+    text-align: left;
+}
+
+.honeypot {
+    position: absolute;
+    left: -9999px;
+    width: 1px;
+    height: 1px;
+    opacity: 0;
+}
+
+.form-group {
+    margin-bottom: var(--spacing-lg);
+}
+
+label, legend {
+    display: block;
+    font-size: 0.95rem;
+    font-weight: 500;
+    color: var(--color-text);
+    margin-bottom: var(--spacing-xs);
+}
+
+legend {
+    padding: 0;
+}
+
+.required {
+    color: var(--color-accent);
+}
+
+input[type="text"],
+textarea {
+    width: 100%;
+    padding: var(--spacing-sm);
+    font-family: var(--font-body);
+    font-size: 1rem;
+    color: var(--color-text);
+    background: rgba(255, 255, 255, 0.9);
+    border: 1px solid #ddd;
+    border-radius: 10px;
+    transition: var(--transition-smooth);
+}
+
+input[type="text"]:focus,
+textarea:focus {
+    outline: none;
+    border-color: var(--color-ice-blue);
+    box-shadow: 0 0 0 3px rgba(168, 216, 234, 0.2);
+}
+
+textarea {
+    resize: vertical;
+    min-height: 60px;
+}
+
+.form-hint {
+    display: block;
+    font-size: 0.85rem;
+    color: var(--color-text-light);
+    margin-top: var(--spacing-xs);
+    font-weight: 300;
+}
+
+.error-message {
+    display: block;
+    font-size: 0.85rem;
+    color: #d32f2f;
+    margin-top: var(--spacing-xs);
+    min-height: 1.2em;
+}
+
+/* ===== Radio Buttons ===== */
+fieldset {
+    border: none;
+}
+
+.radio-group {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-sm);
+}
+
+.radio-label {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-sm);
+    cursor: pointer;
+    padding: var(--spacing-sm);
+    background: rgba(255, 255, 255, 0.6);
+    border-radius: 10px;
+    transition: var(--transition-smooth);
+}
+
+.radio-label:hover {
+    background: rgba(255, 255, 255, 0.9);
+}
+
+.radio-label input[type="radio"] {
+    position: absolute;
+    opacity: 0;
+}
+
+.radio-custom {
+    width: 22px;
+    height: 22px;
+    border: 2px solid var(--color-ice-blue);
+    border-radius: 50%;
+    position: relative;
+    flex-shrink: 0;
+}
+
+.radio-label input[type="radio"]:checked + .radio-custom::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 12px;
+    height: 12px;
+    background: var(--color-ice-blue);
+    border-radius: 50%;
+}
+
+.radio-label input[type="radio"]:focus + .radio-custom {
+    box-shadow: 0 0 0 3px rgba(168, 216, 234, 0.3);
+}
+
+/* ===== Checkboxes ===== */
+.checkbox-group {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-xs);
+}
+
+.checkbox-label {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-sm);
+    cursor: pointer;
+    padding: var(--spacing-xs) var(--spacing-sm);
+    background: rgba(255, 255, 255, 0.4);
+    border-radius: 8px;
+    transition: var(--transition-smooth);
+}
+
+.checkbox-label:hover {
+    background: rgba(255, 255, 255, 0.7);
+}
+
+.checkbox-label input[type="checkbox"] {
+    position: absolute;
+    opacity: 0;
+}
+
+.checkbox-custom {
+    width: 20px;
+    height: 20px;
+    border: 2px solid var(--color-ice-blue);
+    border-radius: 4px;
+    position: relative;
+    flex-shrink: 0;
+    background: white;
+}
+
+.checkbox-label input[type="checkbox"]:checked + .checkbox-custom::after {
+    content: '✓';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    color: var(--color-ice-blue);
+    font-size: 14px;
+    font-weight: bold;
+}
+
+.checkbox-label input[type="checkbox"]:focus + .checkbox-custom {
+    box-shadow: 0 0 0 3px rgba(168, 216, 234, 0.3);
+}
+
+/* ===== Buttons ===== */
+.btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--spacing-xs);
+    padding: var(--spacing-sm) var(--spacing-lg);
+    font-family: var(--font-body);
+    font-size: 1rem;
+    font-weight: 500;
+    text-decoration: none;
+    border: none;
+    border-radius: 25px;
+    cursor: pointer;
+    transition: var(--transition-smooth);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+}
+
+.btn-primary {
+    background: var(--color-primary);
+    color: var(--color-white);
+}
+
+.btn-primary:hover {
+    background: var(--color-accent);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 16px rgba(0,0,0,0.15);
+}
+
+.btn-primary:active {
+    transform: translateY(0);
+}
+
+.btn-submit {
+    width: 100%;
+    background: var(--color-ice-blue);
+    color: var(--color-primary);
+    font-size: 1.125rem;
+    font-weight: 600;
+    padding: var(--spacing-md);
+    margin-top: var(--spacing-sm);
+}
+
+.btn-submit:hover {
+    background: var(--color-accent);
+    color: var(--color-white);
+}
+
+.btn-submit:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+.btn-icon {
+    font-size: 1.2em;
+}
+
+.btn-spinner {
+    display: none;
+    width: 20px;
+    height: 20px;
+    border: 2px solid rgba(255,255,255,0.3);
+    border-top-color: white;
+    border-radius: 50%;
+    animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+    to { transform: rotate(360deg); }
+}
+
+.btn-submit.loading .btn-text {
+    display: none;
+}
+
+.btn-submit.loading .btn-spinner {
+    display: block;
+}
+
+/* ===== Closing Section ===== */
+.closing-section {
+    text-align: center;
+    padding-bottom: var(--spacing-xl) !important;
+}
+
+.winter-accent {
+    font-size: 2rem;
+    margin-bottom: var(--spacing-md);
+    opacity: 0.7;
+}
+
+.closing-text {
+    font-size: 0.95rem;
+    color: var(--color-text-light);
+    line-height: 1.7;
+    margin-bottom: var(--spacing-md);
+    font-weight: 300;
+}
+
+.closing-names {
+    font-family: var(--font-script);
+    font-size: 1.8rem;
+    color: var(--color-primary);
+    margin: var(--spacing-md) 0;
+}
+
+/* ===== Modal ===== */
+.modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 9999;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: var(--spacing-md);
+}
+
+.modal[hidden] {
+    display: none;
+}
+
+.modal-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    backdrop-filter: blur(4px);
+    animation: fadeIn 0.3s ease;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+.modal-content {
+    position: relative;
+    background: var(--color-background);
+    border-radius: 16px;
+    padding: var(--spacing-xl) var(--spacing-md);
+    max-width: 360px;
+    width: 100%;
+    text-align: center;
+    box-shadow: 0 8px 32px rgba(0,0,0,0.2);
+    animation: slideUp 0.3s ease;
+}
+
+@keyframes slideUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.modal-content h3 {
+    font-family: var(--font-script);
+    font-size: 2rem;
+    color: var(--color-primary);
+    margin-bottom: var(--spacing-sm);
+    font-weight: 400;
+}
+
+.modal-content p {
+    color: var(--color-text-light);
+    margin-bottom: var(--spacing-md);
+    font-weight: 300;
+}
+
+/* ===== Responsive adjustments ===== */
+@media (min-width: 375px) {
+    :root {
+        font-size: 17px;
+    }
+}
+
+@media (min-width: 414px) {
+    :root {
+        font-size: 18px;
+    }
+}
+
+/* ===== Accessibility ===== */
+:focus-visible {
+    outline: 2px solid var(--color-ice-blue);
+    outline-offset: 2px;
+}
+
+/* Safe area for notched devices */
+@supports (padding-top: env(safe-area-inset-top)) {
+    body {
+        padding-top: env(safe-area-inset-top);
+        padding-bottom: env(safe-area-inset-bottom);
+    }
+}
