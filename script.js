@@ -175,27 +175,27 @@
         });
     }
    if (mapsBtn1) {
-        mapsBtn.addEventListener('click', function(e) {
+        mapsBtn1.addEventListener('click', function(e) {
             e.preventDefault();
 
             // Get the Yandex Maps URL from data attribute
-            const mapsUrl = this.getAttribute('data-maps-url');
+            const mapsUrl1 = this.getAttribute('data-maps-url');
 
-            if (!mapsUrl || mapsUrl.includes('YOUR_ADDRESS_HERE')) {
+            if (!mapsUrl1 || mapsUrl1.includes('YOUR_ADDRESS_HERE')) {
                 alert('Адрес места проведения будет указан позже');
                 return;
             }
 
             // Try to open Yandex Maps app first (mobile deep-link)
-            const appUrl = mapsUrl.replace('https://', 'yandexmaps://');
+            const appUrl1 = mapsUrl1.replace('https://', 'yandexmaps://');
 
             // Attempt to open app
-            const appAttempt = window.open(appUrl, '_blank');
+            const appAttempt1 = window.open(appUrl1, '_blank');
 
             // Fallback to web version after short delay
             setTimeout(() => {
                 if (!document.hidden) {
-                    window.open(mapsUrl, '_blank');
+                    window.open(mapsUrl1, '_blank');
                 }
             }, 1500);
         });
