@@ -7,6 +7,27 @@
 // TODO: В HTML должна быть строка: <script src="emailjs-config.js"></script>
 // TODO: И ПОСЛЕ неё: <script src="script.js"></script>
 
+// ===== EMAILJS INITIALIZATION (вне IIFE) =====
+// Инициализация EmailJS должна быть ДО IIFE
+if (typeof emailjs !== 'undefined' && typeof EMAILJS_CONFIG !== 'undefined' && typeof isConfigured === 'function') {
+    if (isConfigured()) {
+        emailjs.init(EMAILJS_CONFIG.PUBLIC_KEY);
+        console.log('✅ EmailJS инициализирован успешно');
+    } else {
+        console.warn('⚠️ ВНИМАНИЕ: EmailJS не настроен!');
+        console.warn('Откройте файл emailjs-config.js и следуйте инструкциям TODO');
+    }
+} else if (typeof emailjs === 'undefined') {
+    console.error('❌ ОШИБКА: EmailJS SDK не загружен!');
+    console.error('Возможно, браузер блокирует CDN. Попробуйте:');
+    console.error('1. Отключить блокировку трекеров для этого сайта');
+    console.error('2. Или скачать emailjs локально');
+} else if (typeof EMAILJS_CONFIG === 'undefined') {
+    console.error('❌ ОШИБКА: emailjs-config.js не подключен!');
+    console.error('Добавьте в HTML перед script.js:');
+    console.error('<script src="emailjs-config.js"></script>');
+}
+
 (function() {
     'use strict';
 
@@ -173,26 +194,6 @@
         });
     });
 
-    // ===== EMAILJS INITIALIZATION =====
-    (function initEmailJS() {
-        if (typeof EMAILJS_CONFIG === 'undefined') {
-            console.error('❌ ОШИБКА: emailjs-config.js не подключен!');
-            console.error('Добавьте в HTML перед script.js:');
-            console.error('<script src="emailjs-config.js"></script>');
-            return;
-        }
-
-        if (!isConfigured()) {
-            console.warn('⚠️ ВНИМАНИЕ: EmailJS не настроен!');
-            console.warn('Откройте файл emailjs-config.js и следуйте инструкциям TODO');
-            return;
-        }
-
-        // Инициализация EmailJS
-        emailjs.init(EMAILJS_CONFIG.PUBLIC_KEY);
-        console.log('✅ EmailJS инициализирован успешно');
-    })();
-
     // ===== Form Handling =====
     const form = document.getElementById('rsvpForm');
     const submitBtn = document.getElementById('submitBtn');
@@ -257,7 +258,12 @@
             }
 
             // Check EmailJS configuration
-            if (typeof EMAILJS_CONFIG === 'undefined' || !isConfigured()) {
+            if (typeof emailjs === 'undefined') {
+                alert('⚠️ EmailJS SDK не загружен. Возможно, браузер блокирует загрузку. Попробуйте отключить блокировку трекеров.');
+                return;
+            }
+
+            if (typeof EMAILJS_CONFIG === 'undefined' || typeof isConfigured === 'undefined' || !isConfigured()) {
                 alert('⚠️ EmailJS не настроен. Проверьте файл emailjs-config.js');
                 return;
             }
@@ -432,9 +438,11 @@
         initSnow();
         console.log('🎉 Страница загружена ❄✨');
         
-        // Check EmailJS configuration
-        if (typeof EMAILJS_CONFIG !== 'undefined' && isConfigured()) {
+        // Check EmailJS status
+        if (typeof emailjs !== 'undefined' && typeof EMAILJS_CONFIG !== 'undefined' && typeof isConfigured === 'function' && isConfigured()) {
             console.log('✅ EmailJS готов к работе');
+        } else if (typeof emailjs === 'undefined') {
+            console.warn('⚠️ EmailJS SDK не загружен - форма не будет работать');
         } else {
             console.warn('⚠️ Настройте EmailJS в файле emailjs-config.js');
         }
