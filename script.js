@@ -8,7 +8,6 @@
 // TODO: И ПОСЛЕ неё: <script src="script.js"></script>
 
 // ===== EMAILJS INITIALIZATION (вне IIFE) =====
-// Инициализация EmailJS должна быть ДО IIFE
 if (typeof emailjs !== 'undefined' && typeof EMAILJS_CONFIG !== 'undefined' && typeof isConfigured === 'function') {
     if (isConfigured()) {
         emailjs.init(EMAILJS_CONFIG.PUBLIC_KEY);
@@ -19,13 +18,9 @@ if (typeof emailjs !== 'undefined' && typeof EMAILJS_CONFIG !== 'undefined' && t
     }
 } else if (typeof emailjs === 'undefined') {
     console.error('❌ ОШИБКА: EmailJS SDK не загружен!');
-    console.error('Возможно, браузер блокирует CDN. Попробуйте:');
-    console.error('1. Отключить блокировку трекеров для этого сайта');
-    console.error('2. Или скачать emailjs локально');
+    console.error('Убедитесь, что файл libs/emailjs.min.js существует');
 } else if (typeof EMAILJS_CONFIG === 'undefined') {
     console.error('❌ ОШИБКА: emailjs-config.js не подключен!');
-    console.error('Добавьте в HTML перед script.js:');
-    console.error('<script src="emailjs-config.js"></script>');
 }
 
 (function() {
@@ -38,7 +33,6 @@ if (typeof emailjs !== 'undefined' && typeof EMAILJS_CONFIG !== 'undefined' && t
         respectReducedMotion: true
     };
 
-    // Check for reduced motion preference
     const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
     // ===== Snow Animation =====
@@ -50,7 +44,6 @@ if (typeof emailjs !== 'undefined' && typeof EMAILJS_CONFIG !== 'undefined' && t
     const ctx = canvas ? canvas.getContext('2d') : null;
     const snowToggle = document.getElementById('snowToggle');
 
-    // Snowflake class with visible icy blue color
     class Snowflake {
         constructor() {
             this.reset();
@@ -111,7 +104,10 @@ if (typeof emailjs !== 'undefined' && typeof EMAILJS_CONFIG !== 'undefined' && t
     }
 
     function initSnow() {
-        if (!canvas || !ctx) return;
+        if (!canvas || !ctx) {
+            console.warn('⚠️ Canvas не найден - снегопад отключен');
+            return;
+        }
 
         resizeCanvas();
         window.addEventListener('resize', resizeCanvas);
@@ -165,7 +161,7 @@ if (typeof emailjs !== 'undefined' && typeof EMAILJS_CONFIG !== 'undefined' && t
         }
     }
 
-    // ===== Maps Buttons with forEach =====
+    // ===== Maps Buttons =====
     const mapsBtns = document.querySelectorAll('.maps-btn');
     
     mapsBtns.forEach(btn => {
@@ -179,13 +175,9 @@ if (typeof emailjs !== 'undefined' && typeof EMAILJS_CONFIG !== 'undefined' && t
                 return;
             }
 
-            // Try to open Yandex Maps app first (mobile deep-link)
             const appUrl = mapsUrl.replace('https://', 'yandexmaps://');
-
-            // Attempt to open app
             window.open(appUrl, '_blank');
 
-            // Fallback to web version after short delay
             setTimeout(() => {
                 if (!document.hidden) {
                     window.open(mapsUrl, '_blank');
@@ -202,11 +194,9 @@ if (typeof emailjs !== 'undefined' && typeof EMAILJS_CONFIG !== 'undefined' && t
     const modalOverlay = document.getElementById('modalOverlay');
     const modalClose = document.getElementById('modalClose');
 
-    // Form validation
     function validateForm() {
         let isValid = true;
 
-        // Name validation
         const nameInput = document.getElementById('name');
         const nameError = document.getElementById('nameError');
         if (!nameInput.value.trim()) {
@@ -216,7 +206,6 @@ if (typeof emailjs !== 'undefined' && typeof EMAILJS_CONFIG !== 'undefined' && t
             nameError.textContent = '';
         }
 
-        // Attending validation
         const attendingInputs = document.querySelectorAll('input[name="attending"]');
         const attendingError = document.getElementById('attendingError');
         const attendingChecked = Array.from(attendingInputs).some(input => input.checked);
@@ -231,7 +220,6 @@ if (typeof emailjs !== 'undefined' && typeof EMAILJS_CONFIG !== 'undefined' && t
         return isValid;
     }
 
-    // Get drinks preferences
     function getDrinksPreferences() {
         const checkboxes = document.querySelectorAll('input[name="drinks[]"]:checked');
         if (checkboxes.length === 0) {
@@ -240,41 +228,36 @@ if (typeof emailjs !== 'undefined' && typeof EMAILJS_CONFIG !== 'undefined' && t
         return Array.from(checkboxes).map(cb => cb.value).join(', ');
     }
 
-    // Form submission with EmailJS
     if (form) {
         form.addEventListener('submit', async function(e) {
             e.preventDefault();
 
-            // Validate form
             if (!validateForm()) {
                 return;
             }
 
-            // Check honeypot (spam protection)
             const honeypot = document.getElementById('website');
             if (honeypot && honeypot.value) {
                 console.log('Spam detected');
                 return;
             }
 
-            // Check EmailJS configuration
             if (typeof emailjs === 'undefined') {
-                alert('⚠️ EmailJS SDK не загружен. Возможно, браузер блокирует загрузку. Попробуйте отключить блокировку трекеров.');
+                alert('⚠️ EmailJS SDK не загружен. Убедитесь, что файл libs/emailjs.min.js существует.');
                 return;
             }
 
             if (typeof EMAILJS_CONFIG === 'undefined' || typeof isConfigured === 'undefined' || !isConfigured()) {
-                alert('⚠️ EmailJS не настроен. Проверьте файл emailjs-config.js');
+                alert('⚠️ EmailJS не настроен. Откройте файл emailjs-config.js и заполните ваши ключи API.');
                 return;
             }
 
-            // Disable button and show loading
             submitBtn.disabled = true;
             submitBtn.classList.add('loading');
-            spinner.style.display = 'inline-block';
-            submitBtn.querySelector('.btn-text').textContent = 'Отправка...';
+            if (spinner) spinner.style.display = 'inline-block';
+            const btnText = submitBtn.querySelector('.btn-text');
+            if (btnText) btnText.textContent = 'Отправка...';
 
-            // Prepare form data for EmailJS
             const formData = {
                 name: document.getElementById('name').value,
                 guest_name: document.getElementById('guestName').value || 'Не указано',
@@ -293,7 +276,6 @@ if (typeof emailjs !== 'undefined' && typeof EMAILJS_CONFIG !== 'undefined' && t
             };
 
             try {
-                // Send via EmailJS
                 const response = await emailjs.send(
                     EMAILJS_CONFIG.SERVICE_ID,
                     EMAILJS_CONFIG.TEMPLATE_ID,
@@ -301,27 +283,21 @@ if (typeof emailjs !== 'undefined' && typeof EMAILJS_CONFIG !== 'undefined' && t
                 );
 
                 console.log('✅ Письмо отправлено успешно:', response);
-
-                // Show success modal
                 showModal();
-
-                // Reset form
                 form.reset();
 
             } catch (error) {
                 console.error('❌ Ошибка отправки:', error);
-                alert('Произошла ошибка при отправке. Пожалуйста, попробуйте ещё раз или свяжитесь с нами напрямую.');
+                alert('Произошла ошибка при отправке. Пожалуйста, попробуйте ещё раз.');
 
             } finally {
-                // Re-enable button
                 submitBtn.disabled = false;
                 submitBtn.classList.remove('loading');
-                spinner.style.display = 'none';
-                submitBtn.querySelector('.btn-text').textContent = 'Отправить';
+                if (spinner) spinner.style.display = 'none';
+                if (btnText) btnText.textContent = 'Отправить';
             }
         });
 
-        // Real-time validation on blur
         const nameInput = document.getElementById('name');
         if (nameInput) {
             nameInput.addEventListener('blur', function() {
@@ -334,7 +310,6 @@ if (typeof emailjs !== 'undefined' && typeof EMAILJS_CONFIG !== 'undefined' && t
             });
         }
 
-        // Attending validation on change
         const attendingInputs = document.querySelectorAll('input[name="attending"]');
         attendingInputs.forEach(input => {
             input.addEventListener('change', function() {
@@ -400,14 +375,13 @@ if (typeof emailjs !== 'undefined' && typeof EMAILJS_CONFIG !== 'undefined' && t
         modalOverlay.addEventListener('click', hideModal);
     }
 
-    // Close modal on Escape key
     document.addEventListener('keydown', function(e) {
         if (e.key === 'Escape' && modal && !modal.hasAttribute('hidden')) {
             hideModal();
         }
     });
 
-    // ===== Smooth Scroll Reveal Animation =====
+    // ===== Smooth Scroll Reveal =====
     if (!prefersReducedMotion) {
         const observerOptions = {
             threshold: 0.1,
@@ -435,20 +409,21 @@ if (typeof emailjs !== 'undefined' && typeof EMAILJS_CONFIG !== 'undefined' && t
 
     // ===== Initialize =====
     function init() {
-        initSnow();
-        console.log('🎉 Страница загружена ❄✨');
+        console.log('🎉 Страница загружена');
         
-        // Check EmailJS status
+        // Инициализация снегопада
+        initSnow();
+        
+        // Проверка EmailJS
         if (typeof emailjs !== 'undefined' && typeof EMAILJS_CONFIG !== 'undefined' && typeof isConfigured === 'function' && isConfigured()) {
             console.log('✅ EmailJS готов к работе');
         } else if (typeof emailjs === 'undefined') {
-            console.warn('⚠️ EmailJS SDK не загружен - форма не будет работать');
+            console.warn('⚠️ EmailJS SDK не загружен - проверьте libs/emailjs.min.js');
         } else {
             console.warn('⚠️ Настройте EmailJS в файле emailjs-config.js');
         }
     }
 
-    // Run on DOM ready
     if (document.readyState === 'loading') {
         document.addEventListener('DOMContentLoaded', init);
     } else {
@@ -456,250 +431,3 @@ if (typeof emailjs !== 'undefined' && typeof EMAILJS_CONFIG !== 'undefined' && t
     }
 
 })();
-
-// ============================================================================
-// EMAILJS INITIALIZATION
-// ============================================================================
-
-// TODO: Проверьте, что EMAILJS_CONFIG импортирован из emailjs-config.js
-(function() {
-    if (typeof EMAILJS_CONFIG === 'undefined') {
-        console.error('❌ ОШИБКА: emailjs-config.js не подключен!');
-        console.error('Добавьте в HTML перед script.js:');
-        console.error('<script src="emailjs-config.js"></script>');
-        return;
-    }
-
-    if (!isConfigured()) {
-        console.warn('⚠️ ВНИМАНИЕ: EmailJS не настроен!');
-        console.warn('Откройте файл emailjs-config.js и следуйте инструкциям TODO');
-        return;
-    }
-
-    // Инициализация EmailJS
-    emailjs.init(EMAILJS_CONFIG.PUBLIC_KEY);
-    console.log('✅ EmailJS инициализирован успешно');
-})();
-
-// ============================================================================
-// FORM VALIDATION & SUBMISSION
-// ============================================================================
-
-const form = document.getElementById('rsvpForm');
-const submitBtn = document.getElementById('submitBtn');
-const spinner = document.getElementById('spinner');
-const modal = document.getElementById('successModal');
-
-// Валидация имени
-function validateName(name) {
-    return name.trim().length >= 2;
-}
-
-// Валидация выбора присутствия
-function validateAttending() {
-    return document.querySelector('input[name="attending"]:checked') !== null;
-}
-
-// Показ ошибки
-function showError(fieldId, message) {
-    const errorElement = document.getElementById(fieldId + 'Error');
-    if (errorElement) {
-        errorElement.textContent = message;
-        errorElement.style.display = 'block';
-    }
-}
-
-// Скрытие ошибки
-function hideError(fieldId) {
-    const errorElement = document.getElementById(fieldId + 'Error');
-    if (errorElement) {
-        errorElement.textContent = '';
-        errorElement.style.display = 'none';
-    }
-}
-
-// Валидация в реальном времени
-document.getElementById('name').addEventListener('blur', function() {
-    if (!validateName(this.value)) {
-        showError('name', 'Пожалуйста, введите ваше полное имя');
-    } else {
-        hideError('name');
-    }
-});
-
-document.querySelectorAll('input[name="attending"]').forEach(radio => {
-    radio.addEventListener('change', function() {
-        hideError('attending');
-    });
-});
-
-// ============================================================================
-// FORM SUBMISSION WITH EMAILJS
-// ============================================================================
-
-form.addEventListener('submit', async function(e) {
-    e.preventDefault();
-    
-    // Проверка honeypot (защита от ботов)
-    if (document.getElementById('website').value !== '') {
-        return false;
-    }
-    
-    // Валидация формы
-    let isValid = true;
-    
-    const name = document.getElementById('name').value;
-    if (!validateName(name)) {
-        showError('name', 'Пожалуйста, введите ваше полное имя');
-        isValid = false;
-    } else {
-        hideError('name');
-    }
-    
-    if (!validateAttending()) {
-        showError('attending', 'Пожалуйста, выберите один из вариантов');
-        isValid = false;
-    } else {
-        hideError('attending');
-    }
-    
-    if (!isValid) {
-        return;
-    }
-    
-    // Проверка конфигурации EmailJS
-    if (typeof EMAILJS_CONFIG === 'undefined' || !isConfigured()) {
-        alert('⚠️ EmailJS не настроен. Проверьте файл emailjs-config.js');
-        return;
-    }
-    
-    // Отключение кнопки и показ спиннера
-    submitBtn.disabled = true;
-    spinner.style.display = 'inline-block';
-    submitBtn.querySelector('.btn-text').textContent = 'Отправка...';
-    
-    // Сбор данных формы
-    const formData = {
-        name: name,
-        guest_name: document.getElementById('guestName').value || 'Не указано',
-        attending: document.querySelector('input[name="attending"]:checked').value === 'yes' 
-            ? 'Да, приду с удовольствием' 
-            : 'К сожалению, не смогу',
-        drinks: getDrinksPreferences(),
-        dietary: document.getElementById('dietary').value || 'Нет особых пожеланий',
-        submission_date: new Date().toLocaleString('ru-RU', {
-            year: 'numeric',
-            month: 'long',
-            day: 'numeric',
-            hour: '2-digit',
-            minute: '2-digit'
-        })
-    };
-    
-    try {
-        // Отправка через EmailJS
-        const response = await emailjs.send(
-            EMAILJS_CONFIG.SERVICE_ID,
-            EMAILJS_CONFIG.TEMPLATE_ID,
-            formData
-        );
-        
-        console.log('✅ Письмо отправлено успешно:', response);
-        
-        // Показ модального окна успеха
-        showSuccessModal();
-        
-        // Очистка формы
-        form.reset();
-        
-    } catch (error) {
-        console.error('❌ Ошибка отправки:', error);
-        
-        // Показ ошибки пользователю
-        alert('Произошла ошибка при отправке. Пожалуйста, попробуйте ещё раз или свяжитесь с нами напрямую.');
-        
-    } finally {
-        // Возврат кнопки в исходное состояние
-        submitBtn.disabled = false;
-        spinner.style.display = 'none';
-        submitBtn.querySelector('.btn-text').textContent = 'Отправить';
-    }
-});
-
-// Получение выбранных напитков
-function getDrinksPreferences() {
-    const checkboxes = document.querySelectorAll('input[name="drinks[]"]:checked');
-    if (checkboxes.length === 0) {
-        return 'Не указано';
-    }
-    return Array.from(checkboxes).map(cb => cb.value).join(', ');
-}
-
-// ============================================================================
-// SUCCESS MODAL
-// ============================================================================
-
-function showSuccessModal() {
-    modal.removeAttribute('hidden');
-    modal.style.display = 'flex';
-    document.body.style.overflow = 'hidden';
-    
-    // Фокус на кнопке закрытия для доступности
-    setTimeout(() => {
-        document.getElementById('modalClose').focus();
-    }, 100);
-}
-
-function closeSuccessModal() {
-    modal.setAttribute('hidden', '');
-    modal.style.display = 'none';
-    document.body.style.overflow = '';
-}
-
-document.getElementById('modalClose').addEventListener('click', closeSuccessModal);
-document.getElementById('modalOverlay').addEventListener('click', closeSuccessModal);
-
-// Закрытие по Escape
-document.addEventListener('keydown', function(e) {
-    if (e.key === 'Escape' && !modal.hasAttribute('hidden')) {
-        closeSuccessModal();
-    }
-});
-
-// ============================================================================
-// SCROLL ANIMATIONS
-// ============================================================================
-
-const observerOptions = {
-    threshold: 0.1,
-    rootMargin: '0px 0px -50px 0px'
-};
-
-const observer = new IntersectionObserver(function(entries) {
-    entries.forEach(entry => {
-        if (entry.isIntersecting) {
-            entry.target.classList.add('fade-in-visible');
-        }
-    });
-}, observerOptions);
-
-document.querySelectorAll('section').forEach(section => {
-    section.classList.add('fade-in');
-    observer.observe(section);
-});
-
-// ============================================================================
-// INITIALIZE ON PAGE LOAD
-// ============================================================================
-
-document.addEventListener('DOMContentLoaded', function() {
-    initSnow();
-    console.log('🎉 Страница загружена');
-    
-    // Проверка конфигурации EmailJS
-    if (typeof EMAILJS_CONFIG !== 'undefined' && isConfigured()) {
-        console.log('✅ EmailJS готов к работе');
-    } else {
-        console.warn('⚠️ Настройте EmailJS в файле emailjs-config.js');
-    }
-});
