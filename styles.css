@@ -95,6 +95,7 @@ body::before {
 
 /* ===== Snow Toggle Button ===== */
 .snow-toggle {
+    display: none;
     position: fixed;
     top: var(--spacing-sm);
     right: var(--spacing-sm);
@@ -132,7 +133,7 @@ body::before {
 
 .decoration-top {
     top: 0;
-    left: 0;
+    left: -10px;
     width: 50%;
     max-width: 220px;
 }
